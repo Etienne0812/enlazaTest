@@ -8,6 +8,9 @@ use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
+
+    
+
     /**
      * Display a listing of the resource.
      *
@@ -15,8 +18,8 @@ class UserController extends Controller
      */
     public function index()
     {
-        //return usuarios::all();
-        return csrf_token();
+        return usuarios::all('id', 'role');
+        //return csrf_token();
     }
 
     /**
@@ -37,7 +40,7 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        usuarios::create($request->input('role'));
+        usuarios::create($request->except('id'));
         
     }
 
@@ -47,7 +50,7 @@ class UserController extends Controller
      * @param  \App\Models\usuarios  $usuarios
      * @return \Illuminate\Http\Response
      */
-    public function show(usuarios $usuarios)
+    public function show(usuarios $usuarios, $id)
     {
         return usuarios::findOrFail($id);
     }
@@ -70,7 +73,7 @@ class UserController extends Controller
      * @param  \App\Models\usuarios  $usuarios
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, usuarios $usuarios)
+    public function update(Request $request, $id)
     {
         usuarios::find($id)->update($request->all());
         return $request->all();
@@ -82,8 +85,11 @@ class UserController extends Controller
      * @param  \App\Models\usuarios  $usuarios
      * @return \Illuminate\Http\Response
      */
-    public function destroy(usuarios $usuarios)
+    public function destroy($id)
     {
-        //
+        usuarios::find($id)->delete();
+        return "done";
     }
+
+    
 }
